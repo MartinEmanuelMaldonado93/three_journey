@@ -25,27 +25,21 @@ class BasicWorldDemo {
 		this._threejs.shadowMap.type = THREE.PCFSoftShadowMap;
 		this._threejs.setPixelRatio(window.devicePixelRatio);
 		this._threejs.setSize(window.innerWidth, window.innerHeight);
-		
+
 		document.body.appendChild(this._threejs.domElement);
 
 		this._uniformData = null;
 		this._clock = null;
 
-		window.addEventListener(
-			"resize",
-			() => {
-				this._OnWindowResize();
-			},
-			false
-		);
+		window.addEventListener("resize", () => this._OnWindowResize(), false);
 
 		const fov = 60;
 		const aspect = window.innerWidth / window.innerHeight;
 		const near = 1.0;
 		const far = 500.0;
 		this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-		this._camera.position.set(0, 8, 40);
-		//this._camera.lookAt(0);
+		this._camera.position.set(0, 4, 10);
+		this._camera.lookAt(0);
 
 		this._scene = new THREE.Scene();
 
@@ -69,9 +63,9 @@ class BasicWorldDemo {
 		light = new THREE.AmbientLight(0x101010);
 		this._scene.add(light);
 
-		const controls = new OrbitControls(this._camera, this._threejs.domElement);
-		controls.target.set(0, 10, 0);
-		controls.autorotate = true;
+		const controls = new THREE.OrbitControls(this._camera, this._threejs.domElement);
+		controls.target.set(0);
+		// controls. = true;
 		controls.update();
 
 		const geometryPlane = new THREE.PlaneGeometry(50, 50);
@@ -86,7 +80,7 @@ class BasicWorldDemo {
 		plane.receiveShadow = true;
 		plane.rotation.x = -Math.PI / 2;
 		// this._scene.add(plane);
-	
+
 		const loader = new THREE.TextureLoader();
 		const AO = loader.load(
 			"./assets/Wood_Herringbone_Tiles_004_SD/Substance_Graph_AmbientOcclusion.jpg"
@@ -169,7 +163,7 @@ class BasicWorldDemo {
 		requestAnimationFrame(() => {
 			const time = this._clock.getElapsedTime();
 			// this._uniformData.u_time.value = time;
-			this._updatables.forEach(item=>item.tick());
+			this._updatables.forEach((item) => item.tick());
 			this._threejs.render(this._scene, this._camera);
 			this._RAF();
 		});
